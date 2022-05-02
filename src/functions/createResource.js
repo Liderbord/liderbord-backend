@@ -12,21 +12,20 @@ resource.set("markdown",request.params.markdown);
     }
 
     resource.set("format", request.params.format);
-    resource.set("liderbordId", request.params.liderbordId);
+    resource.set("liderbordID", request.params.liderbordID);
+    resource.set("userID",request.params.userID);
   
     await resource.save().then(
       (resource) => {
         // Execute any logic that should take place after the object is saved.
-        alert("New object created with objectId: " + resource.id);
+        logger.info("New object created with objectId: " + resource.id);
         return resource;
       },
       (error) => {
         // Execute any logic that should take place if the save fails.
         // error is a Moralis.Error with an error code and message.
   
-        alert(
-          "Failed to create new resource, with error code: " + error.message
-        );
+        
         logger.error(
           "createResource: Failed to create new resource, with error code: " +
             error.message
