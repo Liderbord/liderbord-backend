@@ -2,12 +2,16 @@ Moralis.Cloud.define("searchLiderbord", async (request) => {
     const logger = Moralis.Cloud.getLogger();
   
     const name = request.params.name;
+    logger.info(name);
     const query = new Moralis.Query("Liderbord");
-    query.fullText("topic", name);
+    logger.info("query démarrée")
+    query.startsWith("topic", name);
+    logger.info("fulltext envoyé")
 
     
 
     const results = await query.find();
+    logger.info(results);
   
     await liderbord.save().then(
       (liderbord) => {
