@@ -3,17 +3,29 @@ Moralis.Cloud.define("searchLiderbord", async (request) => {
   
     const name = request.params.name;
     const query = new Moralis.Query("Liderbord");
-    query.fullText("topic", name);
+    query.startsWith("topic", name);
 
     
 
     const results = await query.find();
+
+    let liderbords = [];
+
+    for (i=0; i<results.length; i++){
+      let liderbord = {
+        topic: results[i].get("topic"),
+        id: results[i].get("objectId"),
+        description: results[i].get("description"),
+        tags: results[i].get("tags")
+      }
+      liderbords.push(liderbord);
+    }
   
     await liderbord.save().then(
       (liderbord) => {
         // Execute any logic that should take place after the object is saved.
         alert("Searching started...");
-        return results;
+        return liderbords;
       },
       (error) => {
         // Execute any logic that should take place if the save fails.
@@ -28,5 +40,5 @@ Moralis.Cloud.define("searchLiderbord", async (request) => {
         );
       }
     );
-    return await results;
+    return await liderbords;
   });
