@@ -11,7 +11,7 @@ Moralis.Cloud.define("createResource", async (request) => {
 resource.set("markdown",request.params.markdown);
     }
 
-    resource.set("format", request.params.format);
+    resource.set("format", request.params.type);
     resource.set("liderbordID", request.params.liderbordID);
     resource.set("userID",request.params.userID);
   
