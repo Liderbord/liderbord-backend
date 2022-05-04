@@ -2,18 +2,15 @@ async function getLiderbordById(id) {
   const resource = "Resource";
   const logger = Moralis.Cloud.getLogger();
 
-
   const query = new Moralis.Query("Liderbord");
   query.equalTo("objectId", id);
 
   const results = await query.find();
 
-
   const liderbord = {
     topic: results[0].get("topic"),
     description: results[0].get("description"),
-    tags: results[0].get("tags")
-
+    tags: results[0].get("tags"),
   };
 
   const resourceQuery = new Moralis.Query("Resource");
@@ -21,11 +18,10 @@ async function getLiderbordById(id) {
 
   const resources = await resourceQuery.find();
 
-
-  var ressourcestab = [];
+  var resourceTab = [];
 
   for (let i = 0; i < resources.length; i++) {
-
+    // Get Votes
     const queryVote = new Moralis.Query("Vote");
     queryVote.equalTo("resourceID", resources[i].id);
     const resultsVote = await queryVote.find();
@@ -39,8 +35,17 @@ async function getLiderbordById(id) {
         downVotes++;
       }
     }
-
+    // Compute the score
     score = upVotes - downVotes;
+
+    // Get Comments
+    const commentQuery = new Moralis.Query("Comment");
+    commentQuery.equalTo("resourceID", resources[i].id);
+    const commentResults = await commentQuery.find();
+    const comments = commentResults.map((value) => {
+      return { vote: value.get("userVote"), comment: value.get("comment") };
+    });
+
     const objectResource = {
       id: resources[i].id,
       title: resources[i].get("title"),
@@ -48,19 +53,20 @@ async function getLiderbordById(id) {
       link: resources[i].get("link"),
       upVotes: upVotes,
       downVotes: downVotes,
-      score: score
-    }
-    ressourcestab.push(objectResource);
-
+      score: score,
+      comments: comments,
+    };
+    resourceTab.push(objectResource);
   }
-  ressourcestab.sort(function (r1, r2) {
+
+  // Sort resources based on their score
+  resourceTab.sort(function (r1, r2) {
     return r2.score - r1.score;
   });
 
   const resourcesObject = {
-    resources: ressourcestab
-  }
-
+    resources: resourceTab,
+  };
 
   const liderbordFinal = Object.assign({}, liderbord, resourcesObject);
   logger.info("liderbordfinal" + liderbordFinal);
@@ -71,7 +77,6 @@ async function getLiderbordById(id) {
     logger.error("Could not find liderbord with id: " + id);
     return {};
   }
-
 }
 
 

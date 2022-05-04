@@ -12,8 +12,11 @@ Ensure you have the moralis cli, NEVER deloy the cloud functions by copy pasting
 You can get the .evn file on notion, you might need to update your cloudfolder path
 
 ```bash
-moralis-admin-cli watch-cloud-folder --autoSave 1
+moralis-admin-cli watch-cloud-folder --autoSave 0
 ```
+
+Please avoid using `--autoSave 1` especially whe others are working on the project.
+
 ### Deploy without .env file
 
 ```bash
