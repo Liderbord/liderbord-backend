@@ -5,7 +5,16 @@ Moralis.Cloud.define("searchLiderbord", async (request) => {
     
     const query = new Moralis.Query("Liderbord");
     query.matches("topic", name);
-    const results = await query.find();
+    
+
+    const queryTag = new Moralis.Query("Liderbord");
+    queryTag.equalTo("tags", name);
+
+    const mainQuery = Moralis.Query.or(query,queryTag);
+
+    const results = await mainQuery.find();
+    logger.info(results);
+
 
     let liderbordTab = [];
 
