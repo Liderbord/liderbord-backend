@@ -20,7 +20,7 @@ async function getLiderbordById(id) {
   resourceQuery.equalTo("liderbordID", id);
 
   const resources = await resourceQuery.find();
-  logger.info("ressource" + resources[0].get("title"));
+
 
   var ressourcestab = [];
 
