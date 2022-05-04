@@ -11,14 +11,14 @@ Moralis.Cloud.define("createLiderbord", async (request) => {
   await liderbord.save().then(
     (liderbord) => {
       // Execute any logic that should take place after the object is saved.
-      alert("New object created with objectId: " + liderbord.id);
+      logger.info("New object created with objectId: " + liderbord.id);
       return liderbord;
     },
     (error) => {
       // Execute any logic that should take place if the save fails.
       // error is a Moralis.Error with an error code and message.
 
-      alert(
+      logger.info(
         "Failed to create new liderbord, with error code: " + error.message
       );
       logger.error(

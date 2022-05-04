@@ -24,23 +24,16 @@ Moralis.Cloud.define("searchLiderbord", async (request) => {
 
       const resources = await resourceQuery.find();
       
-      for (let j=0; j<resources.length; j++){
-        logger.info(resources[j].get("title"));
-      }
-      
-      
       let liderbord = {
-        id: results[i].get("objectId"),
+        id: results[i].id,
         topic: results[i].get("topic"),
         description: results[i].get("description"),
         tags: results[i].get("tags"),
         nbResources: Object.keys(resources).length
       }
-      logger.info("objectId" + results[i].get("objectId"));
+      logger.info("objectId" + results[i].id);
       
       
-      logger.info("liderbord.nbResources" + liderbord.nbResources);
-
       liderbordTab.push(liderbord);
     }
 
