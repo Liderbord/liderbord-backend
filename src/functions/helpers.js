@@ -26,6 +26,7 @@ var ressourcestab = [];
 
 for (let i = 0; i < resources.length; i++) {
     const objectResource = {
+        id:resources[i].get("objectId"),
         title:resources[i].get("title"),
         type:resources[i].get("format"),
         link:resources[i].get("link"),
