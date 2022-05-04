@@ -2,31 +2,49 @@ Moralis.Cloud.define("searchLiderbord", async (request) => {
     const logger = Moralis.Cloud.getLogger();
   
     const name = request.params.name;
+    
     const query = new Moralis.Query("Liderbord");
-    query.fullText("topic", name);
-
+    query.matches("topic", name);
     
 
-    const results = await query.find();
-  
-    await liderbord.save().then(
-      (liderbord) => {
-        // Execute any logic that should take place after the object is saved.
-        alert("Searching started...");
-        return results;
-      },
-      (error) => {
-        // Execute any logic that should take place if the save fails.
-        // error is a Moralis.Error with an error code and message.
-  
-        alert(
-          "Failed to search liderbords, with error code: " + error.message
-        );
-        logger.error(
-          "searchLiderbord: Failed to search liderbords, with error code: " +
-            error.message
-        );
+    const queryTag = new Moralis.Query("Liderbord");
+    queryTag.equalTo("tags", name);
+
+    const mainQuery = Moralis.Query.or(query,queryTag);
+
+    const results = await mainQuery.find();
+    logger.info(results);
+
+
+    let liderbordTab = [];
+
+    for(i=0;i<results.length;i++){
+      const resourceQuery = new Moralis.Query("Resource");
+      resourceQuery.equalTo("liderbordID", results[i].id);
+
+      const resources = await resourceQuery.find();
+      
+      for (let j=0; j<resources.length; j++){
+        logger.info(resources[j].get("title"));
       }
-    );
-    return await results;
+      
+      
+      let liderbord = {
+        id: results[i].get("objectId"),
+        topic: results[i].get("topic"),
+        description: results[i].get("description"),
+        tags: results[i].get("tags"),
+        nbResources: Object.keys(resources).length
+      }
+      logger.info("objectId" + results[i].get("objectId"));
+      
+      
+      logger.info("liderbord.nbResources" + liderbord.nbResources);
+
+      liderbordTab.push(liderbord);
+    }
+
+
+
+    return liderbordTab;
   });
