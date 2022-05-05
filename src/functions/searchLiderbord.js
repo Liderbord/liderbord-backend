@@ -4,11 +4,11 @@ Moralis.Cloud.define("searchLiderbord", async (request) => {
     const name = request.params.name;
     
     const query = new Moralis.Query("Liderbord");
-    query.matches("topic", name);
+    query.matches("topic", name.toLowerCase());
     
-
+    
     const queryTag = new Moralis.Query("Liderbord");
-    queryTag.equalTo("tags", name);
+    queryTag.equalTo("tags", name.toLowerCase());
 
     const mainQuery = Moralis.Query.or(query,queryTag);
 
