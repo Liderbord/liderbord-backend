@@ -7,7 +7,9 @@ Moralis.Cloud.define("createLiderbord", async (request) => {
   checkQuery.equalTo("topic", request.params.title);
   const checkResult = await checkQuery.find();
   
-  if (!checkResult) {
+  logger.info("check result " +  typeof checkResult);
+
+  if (!checkResult.length) {
     
     const liderbord = new Liderbord();
 
@@ -34,6 +36,7 @@ Moralis.Cloud.define("createLiderbord", async (request) => {
         );
       }
     );
+    
     return await liderbord.id;
   } else {
     return null;
